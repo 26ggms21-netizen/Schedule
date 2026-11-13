@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>기말고사 공부 계획표</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<style>
+/* 흙빛 종이 바탕 · 잉크색 머리띠 · 과목마다 고유한 색. 기존 수업 웹앱과 같은 글꼴과 색 체계. */
+:root{
+  color-scheme:light;
+  --paper:#FAF4E8;--card:#FFFDF8;--ink:#37291D;--soft:#6F5E4E;--line:#E4D8C4;--line2:#EFE6D6;
+  --steel:#2D4F6B;--steel-bg:#E0E8EF;--brass:#C98F24;--brass-bg:#FAEFD3;--poppy:#B4432C;--poppy-bg:#F8E2DA;--olive:#5E7238;--olive-bg:#E8EDD8;
+  --display:"Jua","Noto Sans KR",sans-serif;--body:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --tc:46px;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6;word-break:keep-all;overflow-wrap:break-word}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--steel);outline-offset:2px}
+[hidden]{display:none!important}
+h1,h2,h3{font-family:var(--display);font-weight:400;line-height:1.25;margin:0}
+p{margin:0}
+header.top{position:sticky;top:0;z-index:9;background:var(--ink);color:#F3EADB}
+.topin{max-width:1080px;margin:auto;display:flex;align-items:center;gap:12px;padding:10px 16px;flex-wrap:wrap}
+.brand{font-family:var(--display);font-size:20px;flex:1 1 auto;display:flex;align-items:center;gap:10px}
+.dday{font-family:var(--display);background:var(--poppy);color:#fff;border-radius:8px;padding:1px 9px;font-size:16px}
+nav{display:flex;gap:6px}
+nav button{background:transparent;border:0;color:#E9DFCF;padding:6px 12px;border-radius:8px;font-size:14px}
+nav button[aria-current=page]{background:var(--brass-bg);color:var(--ink)}
+main{max-width:1080px;margin:auto;padding:20px 16px 120px;display:grid;gap:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:clamp(16px,3.4vw,28px);display:grid;gap:14px;min-width:0}
+.no{font-size:12px;color:var(--soft);letter-spacing:.08em}
+h1{font-size:clamp(30px,6vw,44px)}
+h2{font-size:clamp(23px,4.4vw,30px)}
+h3{font-size:19px}
+.note{font-size:13px;color:var(--soft)}
+.btn{background:var(--poppy);color:#fff;border:0;border-radius:10px;padding:10px 18px;font-weight:700}
+.btn.alt{background:transparent;color:var(--ink);border:1.5px solid var(--ink)}
+.btn.steel{background:var(--steel)}
+.btn.sm{padding:6px 12px;font-size:13px}
+.btn:disabled{opacity:.5;cursor:default}
+.btns{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+label{font-weight:700;font-size:14px;display:grid;gap:5px}
+label span{font-weight:400;font-size:12px;color:var(--soft)}
+input[type=text],input[type=password],select,textarea{width:100%;background:#fff;border:1.5px solid #CDBEA6;border-radius:9px;padding:9px 12px;font-weight:400;font-size:15px}
+textarea{min-height:64px;resize:vertical}
+.g3{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr))}
+.msg{border-radius:10px;padding:10px 14px;font-size:14px;white-space:pre-line}
+.msg.ok{background:var(--olive-bg)}.msg.warn{background:var(--brass-bg)}.msg.bad{background:var(--poppy-bg)}
+.demo{background:var(--steel-bg);border:1px dashed #9DB3C6;border-radius:12px;padding:10px 14px;font-size:13px}
+
+/* 상단 요약 */
+.who{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center}
+.who h2{flex:1 1 auto}
+.badge{font-size:12px;font-weight:700;border-radius:20px;padding:3px 11px;background:var(--line2);color:var(--soft);white-space:nowrap}
+.badge.done{background:var(--olive-bg);color:#46562A}.badge.wip{background:var(--brass-bg);color:#6F4E10}.badge.none{background:var(--poppy-bg);color:#85301E}
+.meter{display:flex;height:12px;border-radius:6px;overflow:hidden;background:var(--line2)}
+.meter i{display:block;height:100%}
+.legend{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:13px}
+.legend span{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.legend b{width:10px;height:10px;border-radius:3px;display:inline-block}
+
+/* 한눈에 보기: 달력 */
+.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+.cal .dh{font-size:12px;text-align:center;color:var(--soft);font-weight:700;padding-bottom:2px}
+.cal .dh.sat{color:var(--steel)}.cal .dh.sun{color:var(--poppy)}
+.mday{border:1px solid var(--line);background:#fff;border-radius:10px;padding:6px 6px 7px;display:grid;gap:4px;text-align:left;min-width:0;min-height:70px;align-content:start}
+.mday.on{border-color:var(--ink);box-shadow:0 0 0 1.5px var(--ink)}
+.mday.we{background:#FFFBF1}
+.mday .top{display:flex;justify-content:space-between;align-items:baseline;gap:3px}
+.mday .dn{font-family:var(--display);font-size:18px;line-height:1}
+.mday .dd{font-size:10px;color:var(--soft)}
+.mday .bar{display:flex;gap:1px;height:8px}
+.mday .bar i{flex:1;border-radius:2px;background:var(--line2)}
+.mday .cnt{font-size:11px;color:var(--soft)}
+.mday.full .cnt{color:var(--olive);font-weight:700}
+.mday.off{background:transparent;border-style:dashed;color:var(--soft)}
+.mday.exam{background:var(--poppy);border-color:var(--poppy);color:#fff}
+.mday.exam .dd,.mday.exam .cnt{color:#fff}
+.sat .dn{color:var(--steel)}.sun .dn{color:var(--poppy)}
+.mday.exam .dn{color:#fff}
+
+/* 주간 시간표 */
+.weektabs{display:flex;gap:6px;flex-wrap:wrap}
+.weektabs button{flex:1 1 0;min-width:90px;border:1.5px solid var(--ink);background:var(--card);border-radius:10px;padding:7px 8px;font-weight:700;font-size:14px;line-height:1.3}
+.weektabs button small{display:block;font-weight:400;font-size:11px;color:var(--soft)}
+.weektabs button[aria-selected=true]{background:var(--ink);color:#fff}
+.weektabs button[aria-selected=true] small{color:#E9DFCF}
+.wkwrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:#fff}
+.wk{display:grid;grid-template-columns:var(--tc) repeat(7,minmax(64px,1fr));grid-auto-rows:minmax(48px,auto);min-width:520px}
+.wk>*{border-right:1px solid var(--line2);border-bottom:1px solid var(--line2);min-width:0}
+.wk .hd{position:sticky;top:0;background:var(--card);text-align:center;padding:6px 2px;font-size:13px;font-weight:700;line-height:1.25;z-index:1}
+.wk .hd small{display:block;font-weight:400;font-size:11px;color:var(--soft)}
+.wk .hd.sat{color:var(--steel)}.wk .hd.sun{color:var(--poppy)}
+.wk .hd.focus{background:var(--brass-bg)}
+.wk .tm{font-size:11px;color:var(--soft);text-align:right;padding:4px 6px 0 0;background:var(--card);line-height:1.2}
+.wk .tm small{display:block;font-size:10px;opacity:.75}
+.wk .school{background:repeating-linear-gradient(135deg,#F4EEE2 0 8px,#EFE7D8 8px 16px);display:flex;align-items:center;justify-content:center;color:var(--soft);font-size:12px;writing-mode:vertical-rl;letter-spacing:.3em}
+.slot{border:0;background:#fff;padding:3px 4px;text-align:left;display:flex;flex-direction:column;gap:1px;font-size:12px;line-height:1.25;overflow:hidden;position:relative}
+.slot:hover{background:#FBF6EC}
+.slot.empty::after{content:"+";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#D5C7AF;font-size:18px}
+.slot.ro.empty::after{content:""}
+.slot.ro{cursor:default}
+.slot.fill{border-left:4px solid var(--c)}
+.slot b{font-size:12.5px;color:var(--c)}
+.slot span{font-size:10.5px;color:var(--soft);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.slot.ro.fill{cursor:pointer}
+
+/* 아래 고정 저장 막대 */
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:8;background:#FFFDF8F2;border-top:1px solid var(--line);backdrop-filter:blur(6px)}
+.dockin{max-width:1080px;margin:auto;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));display:flex;gap:8px 12px;align-items:center;flex-wrap:wrap}
+.dockin .st{flex:1 1 200px;font-size:13px;color:var(--soft)}
+.dockin .st b{color:var(--ink)}
+
+/* 입력 시트 */
+#sheetbg{position:fixed;inset:0;z-index:20;background:#1F160F80;display:flex;align-items:flex-end;justify-content:center}
+@media(min-width:720px){#sheetbg{align-items:center}}
+#sheet{background:var(--card);width:min(560px,100%);max-height:92vh;overflow:auto;border-radius:20px 20px 0 0;padding:18px 18px calc(18px + env(safe-area-inset-bottom,0px));display:grid;gap:14px}
+@media(min-width:720px){#sheet{border-radius:20px}}
+.sh-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.x{border:0;background:var(--line2);border-radius:50%;width:34px;height:34px;font-size:18px;line-height:1;flex:none}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1.5px solid var(--line);background:#fff;border-radius:20px;padding:5px 13px;font-size:14px;font-weight:500}
+.chip[aria-pressed=true]{background:var(--c,var(--ink));border-color:var(--c,var(--ink));color:#fff}
+.chip .dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--c);margin-right:6px;vertical-align:1px}
+.chip[aria-pressed=true] .dot{background:#fff}
+.fs{border:0;margin:0;padding:0;display:grid;gap:7px}
+.fs legend{font-weight:700;font-size:14px;padding:0;margin-bottom:7px}
+.fs legend span{font-weight:400;font-size:12px;color:var(--soft)}
+.rotxt{display:grid;gap:8px;font-size:15px}
+.rotxt div{display:flex;gap:10px}.rotxt b{flex:none;width:64px;color:var(--soft);font-size:13px;padding-top:2px}
+
+/* 교사 화면 */
+.stats{display:flex;flex-wrap:wrap;gap:10px}
+.stat{flex:1 1 120px;border-radius:14px;padding:12px 16px;background:var(--line2)}
+.stat b{display:block;font-family:var(--display);font-size:32px;font-weight:400;line-height:1.1}
+.stat.done{background:var(--olive-bg)}.stat.wip{background:var(--brass-bg)}.stat.none{background:var(--poppy-bg)}
+.roster{display:grid;gap:8px;grid-template-columns:repeat(auto-fill,minmax(min(100%,190px),1fr))}
+.stu{border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 12px;display:grid;gap:6px;text-align:left}
+.stu.none{background:transparent;border-style:dashed;cursor:default}
+.stu .r1{display:flex;align-items:center;gap:8px}
+.stu .num{font-family:var(--display);font-size:20px;width:30px}
+.stu .nm{flex:1;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.stu .when{font-size:11px;color:var(--soft)}
+.subtabs{display:flex;gap:6px}
+.subtabs button{flex:1;border:1.5px solid var(--ink);background:var(--card);border-radius:9px;padding:7px 8px;font-weight:700}
+.subtabs button[aria-selected=true]{background:var(--ink);color:#fff}
+.daylist{display:grid;gap:12px}
+.daylist section{border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.daylist h3{font-size:16px;background:var(--line2);padding:6px 12px}
+.daylist table{width:100%;border-collapse:collapse;font-size:14px}
+.daylist td{padding:6px 10px;border-top:1px solid var(--line2);vertical-align:top}
+.daylist td:first-child{width:96px;color:var(--soft);white-space:nowrap}
+.daylist td:nth-child(2){width:80px;font-weight:700;color:var(--c)}
+.daylist td:nth-child(3){width:150px;color:var(--soft)}
+.daylist .mm{display:none;font-size:12px;color:var(--soft)}
+@media(max-width:600px){.daylist td:nth-child(3){display:none}.daylist td:first-child{width:74px}.daylist .mm{display:block}}
+.back{justify-self:start}
+@media(max-width:600px){
+  .cal{gap:3px}.mday{padding:4px 3px 5px;min-height:58px;border-radius:8px}
+  .mday .dd,.mday .u{display:none}.mday .dn{font-size:15px}.mday .cnt{font-size:10px;line-height:1.2}
+  .mday.exam .cnt{font-size:9px;letter-spacing:-.04em}
+  .mday.exam .dd{display:block;font-size:9px}
+  .wk{grid-template-columns:40px repeat(7,minmax(54px,1fr))}
+}
+</style>
+</head>
+<body>
+<header class="top"><div class="topin">
+  <div class="brand">2학기 기말고사 공부 계획표 <span class="dday" id="dday"></span></div>
+  <nav id="nav"></nav>
+</div></header>
+<main id="app"></main>
+<div class="dock" id="dock" hidden><div class="dockin" id="dockin"></div></div>
+<div id="sheetbg" hidden><div id="sheet" role="dialog" aria-modal="true" aria-labelledby="shtitle"></div></div>
+
+<script>
+/* 서버 주소: Apps Script 웹 앱 URL(https://script.google.com/macros/s/.../exec)을 큰따옴표 안에 넣으세요.
+   교사 암호는 여기에 넣지 않습니다. (Code.gs에만 넣습니다) */
+const SYNC_URL = "https://script.google.com/macros/s/AKfycbzRVk4RlURx4z93DSQGSPTO8q6So_tdugQCNt50tWErCO_LppiUHnHwx67oAF4FrZcz/exec";
+</script>
+<script>
+/* ================= 설정 ================= */
+const CLASS_SIZE = 28;
+const EXAM = {y:2026, m:12, d:10};
+const SUBJECTS = [
+  {n:'국어',c:'#C8553D'},{n:'수학',c:'#2D63A0'},{n:'영어',c:'#B7801C'},{n:'역사',c:'#7A4E9A'},
+  {n:'과학',c:'#3B8657'},{n:'도덕',c:'#B04A78'},{n:'기가',c:'#2A7C8A'},{n:'중국어',c:'#8A5A2B'},
+  {n:'휴식',c:'#8C8476'}
+];
+const METHODS = ['정리','노트 필기','암기','문제 풀이','마인드 맵','백지에 쓰기','오답 정리','교과서 읽기','개념 복습','인강 듣기'];
+const SUBC = Object.fromEntries(SUBJECTS.map(s=>[s.n,s.c]));
+const DOW = ['월','화','수','목','금','토','일'];
+
+/* 11/16(월) ~ 12/6(일), 평일 17~24시, 주말 9~24시 */
+const DAYS = [];
+(function(){
+  const exam = Date.UTC(EXAM.y,EXAM.m-1,EXAM.d);
+  for(let i=0;i<21;i++){
+    const dt = new Date(Date.UTC(2026,10,16+i));
+    const m = dt.getUTCMonth()+1, d = dt.getUTCDate(), dow = i%7, we = dow>=5;
+    const hours = []; for(let h=(we?9:17); h<24; h++) hours.push(h);
+    DAYS.push({key:String(m).padStart(2,'0')+String(d).padStart(2,'0'), m, d, dow, we, week:Math.floor(i/7), hours, dday:Math.round((exam-dt)/864e5), idx:i});
+  }
+})();
+const SLOTS = DAYS.flatMap(D=>D.hours.map(h=>D.key+'-'+String(h).padStart(2,'0')));
+const TOTAL = SLOTS.length; // 195
+const WEEKS = [0,1,2].map(w=>{const a=DAYS[w*7],b=DAYS[w*7+6];return {label:`${w+1}주차`,range:`${a.m}/${a.d}~${b.m}/${b.d}`}});
+const dayOf = k => DAYS.find(D=>D.key===k.slice(0,4));
+const hourOf = k => +k.slice(5);
+const slotLabel = k => {const D=dayOf(k),h=hourOf(k);return `${D.m}월 ${D.d}일(${DOW[D.dow]}) ${h}:00~${h+1===24?'24':h+1}:00`};
+
+/* ================= 서버 연결 =================
+   SYNC_URL에 Apps Script 웹 앱 주소를 넣으면 학생 제출물이 구글 시트에 모인다.
+   비어 있으면 이 기기 브라우저에만 저장하는 미리보기(체험) 모드로 동작한다. */
+const LIVE = !!SYNC_URL;
+const ls = {get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}},del(k){try{localStorage.removeItem(k)}catch(e){}}};
+const MOCK = {
+  _db(){return ls.get('plan-mockdb',{})},_put(db){ls.set('plan-mockdb',db)},
+  _now(){const d=new Date();return `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`},
+  studentLoad(num,pin){const r=this._db()[num];if(!r)return {ok:true,exists:false};if(r.pin!==pin)return {ok:false,error:'wrong_pin'};return {ok:true,exists:true,name:r.name,plan:r.plan,submitted:r.submitted,submittedAt:r.submittedAt,savedAt:r.savedAt}},
+  studentSave(num,name,pin,planJson,submit){const db=this._db();const r=db[num];if(r&&r.pin!==pin)return {ok:false,error:'wrong_pin'};const now=this._now();const n={name,pin,plan:JSON.parse(planJson),submitted:!!(submit||(r&&r.submitted)),submittedAt:submit?now:(r&&r.submittedAt)||'',savedAt:now};db[num]=n;this._put(db);return {ok:true,submitted:n.submitted,submittedAt:n.submittedAt,savedAt:now}},
+  teacherList(key){if(key!=='0000')return {ok:false,error:'wrong_key'};const db=this._db();return {ok:true,rows:Object.keys(db).map(k=>{const r=db[k];return {num:+k,name:r.name,submitted:r.submitted,submittedAt:r.submittedAt,savedAt:r.savedAt,hours:countBy(r.plan)}})}},
+  teacherGet(key,num){if(key!=='0000')return {ok:false,error:'wrong_key'};const r=this._db()[num];return r?{ok:true,num,name:r.name,plan:r.plan,submitted:r.submitted,submittedAt:r.submittedAt,savedAt:r.savedAt}:{ok:false,error:'not_found'}},
+  teacherResetPin(key,num){if(key!=='0000')return {ok:false,error:'wrong_key'};const db=this._db();if(db[num]){db[num].pin='';db[num].pinReset=true}this._put(db);return {ok:true}}
+};
+// 체험 모드에서 비밀번호가 초기화된 학생은 다음 입력한 비밀번호가 새 비밀번호가 된다.
+const _ml=MOCK.studentLoad.bind(MOCK);MOCK.studentLoad=function(num,pin){const db=this._db(),r=db[num];if(r&&!r.pin){r.pin=pin;this._put(db)}return _ml(num,pin)};
+async function call(fn,...args){
+  if(LIVE){
+    const c=new AbortController(), t=setTimeout(()=>c.abort(),25000);
+    try{
+      const res=await fetch(SYNC_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:fn,args}),signal:c.signal});
+      return await res.json();
+    }finally{clearTimeout(t)}
+  }
+  return new Promise(res=>setTimeout(()=>res(MOCK[fn](...args)),250));
+}
+
+/* ================= 도구 ================= */
+const $ = s=>document.querySelector(s);
+const esc = s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const rgba=(hex,a)=>{const n=parseInt(hex.slice(1),16);return `rgba(${n>>16},${(n>>8)&255},${n&255},${a})`};
+function countBy(plan){const o={};Object.values(plan||{}).forEach(v=>{if(v&&v.s)o[v.s]=(o[v.s]||0)+1});return o}
+const filledCount = plan => Object.keys(plan||{}).filter(k=>plan[k]&&(plan[k].s||plan[k].t||(plan[k].m||[]).length)).length;
+function meterHTML(hours){const tot=TOTAL;return `<div class="meter" aria-hidden="true">${SUBJECTS.filter(s=>hours[s.n]).map(s=>`<i style="width:${hours[s.n]/tot*100}%;background:${s.c}"></i>`).join('')}</div>`}
+function legendHTML(hours){const L=SUBJECTS.filter(s=>hours[s.n]);return L.length?`<div class="legend">${L.map(s=>`<span><b style="background:${s.c}"></b>${s.n} ${hours[s.n]}시간</span>`).join('')}</div>`:'<p class="note">아직 계획한 과목이 없어요.</p>'}
+const ERR = {wrong_pin:'번호와 비밀번호가 맞지 않아요. 처음 계획표를 만들 때 정한 비밀번호를 입력하세요.\n잊어버렸다면 선생님께 비밀번호 초기화를 요청하세요.',locked:'비밀번호를 여러 번 틀려서 10분 동안 잠겼어요. 잠시 뒤 다시 시도하세요.',wrong_key:'교사 암호가 맞지 않습니다.',bad_input:'입력값을 다시 확인하세요.',not_found:'아직 계획표가 없습니다.',key_not_set:'apps-script.gs의 TEACHER_KEY를 교사 암호로 바꾼 뒤 새 버전으로 배포하세요.'};
+const errText = e => ERR[e] || '저장소에 연결하지 못했어요. 인터넷 연결을 확인하고 다시 시도하세요.\n(선생님: SYNC_URL 주소와 웹 앱 액세스 권한 "모든 사용자"를 확인하세요.)';
+
+/* ================= 상태 ================= */
+const S = {
+  route:'student',
+  me:null,            // {num,name,pin}
+  plan:{}, info:{submitted:false,submittedAt:'',savedAt:''},
+  dirty:false, week:0, focusDay:null, busy:false, msg:null, confirmSubmit:false,
+  login:{num:ls.get('plan-last',{}).num||'', name:ls.get('plan-last',{}).name||'', err:''},
+  T:{key:'',rows:null,err:'',busy:false,sel:null,detail:null,view:'cal',week:0,focusDay:null,resetAsk:false,msg:''}
+};
+// 첫 화면에서 이번 주를 보여 준다.
+(function(){const t=new Date();const k=String(t.getMonth()+1).padStart(2,'0')+String(t.getDate()).padStart(2,'0');const D=DAYS.find(x=>x.key===k);if(D){S.week=D.week;S.T.week=D.week}})();
+
+/* ================= 공통 그리기: 달력 · 주간표 ================= */
+function calHTML(plan,selWeek,focus){
+  const head = DOW.map((d,i)=>`<div class="dh ${i===5?'sat':i===6?'sun':''}">${d}</div>`).join('');
+  const days = DAYS.map(D=>{
+    const segs = D.hours.map(h=>{const v=plan[D.key+'-'+String(h).padStart(2,'0')];return `<i${v&&v.s?` style="background:${SUBC[v.s]||'#999'}"`:v?' style="background:#bbb"':''}></i>`}).join('');
+    const n = D.hours.filter(h=>plan[D.key+'-'+String(h).padStart(2,'0')]).length;
+    return `<button class="mday ${D.we?'we':''} ${D.dow===5?'sat':D.dow===6?'sun':''} ${D.week===selWeek&&focus===D.key?'on':''} ${n===D.hours.length?'full':''}" data-day="${D.key}" aria-label="${D.m}월 ${D.d}일 ${n}/${D.hours.length}시간 계획">
+      <div class="top"><span class="dn">${D.d===1||D.idx===0?D.m+'/':''}${D.d}</span><span class="dd">D-${D.dday}</span></div>
+      <div class="bar">${segs}</div><div class="cnt">${n}/${D.hours.length}<span class="u">시간</span></div></button>`}).join('');
+  // 시험 주간: 12/7 ~ 12/13
+  const tail = [7,8,9,10,11,12,13].map((d,i)=>d===10
+    ? `<div class="mday exam"><div class="top"><span class="dn">${d}</span><span class="dd">D-day</span></div><div class="cnt">기말고사</div></div>`
+    : `<div class="mday off ${i===5?'sat':i===6?'sun':''}"><div class="top"><span class="dn">${d}</span>${d<10?`<span class="dd">D-${10-d}</span>`:''}</div><div class="cnt">${d<10?'시험 직전':''}</div></div>`).join('');
+  return `<div class="cal">${head}${days}${tail}</div>`;
+}
+function weekTabsHTML(plan,w,attr){
+  return `<div class="weektabs" role="tablist">${WEEKS.map((W,i)=>{const n=DAYS.filter(D=>D.week===i).reduce((a,D)=>a+D.hours.filter(h=>plan[D.key+'-'+String(h).padStart(2,'0')]).length,0),t=DAYS.filter(D=>D.week===i).reduce((a,D)=>a+D.hours.length,0);return `<button role="tab" ${attr}="${i}" aria-selected="${i===w}">${W.label}<small>${W.range} · ${n}/${t}시간</small></button>`}).join('')}</div>`;
+}
+function weekHTML(plan,w,ro,focus){
+  const ds = DAYS.filter(D=>D.week===w);
+  let h = `<div class="hd" style="grid-row:1;grid-column:1"></div>`;
+  ds.forEach((D,i)=>{h+=`<div class="hd ${i===5?'sat':i===6?'sun':''} ${focus===D.key?'focus':''}" style="grid-row:1;grid-column:${i+2}">${DOW[D.dow]} ${D.m}/${D.d}<small>D-${D.dday}</small></div>`});
+  for(let hr=9;hr<24;hr++){
+    const r = hr-9+2;
+    h += `<div class="tm" style="grid-row:${r};grid-column:1">${hr}:00<small>~${hr+1}:00</small></div>`;
+    ds.forEach((D,i)=>{
+      const c=i+2;
+      if(!D.we && hr<17){ if(hr===9) h+=`<div class="school" style="grid-row:${r} / span 8;grid-column:${c}">학교 수업</div>`; return; }
+      const k = D.key+'-'+String(hr).padStart(2,'0'), v = plan[k];
+      if(v){
+        const col = SUBC[v.s]||'#8C8476';
+        const sub = (v.m||[]).join('·') || v.t || '';
+        h += `<button class="slot fill ${ro?'ro':''}" data-slot="${k}" style="grid-row:${r};grid-column:${c};--c:${col};background:${rgba(col,.13)}" aria-label="${esc(slotLabel(k))} ${esc(v.s||'')} ${esc(sub)}"><b>${esc(v.s||'과목 없음')}</b><span>${esc(sub)}</span></button>`;
+      } else {
+        h += `<button class="slot empty ${ro?'ro':''}" data-slot="${k}" style="grid-row:${r};grid-column:${c}" aria-label="${esc(slotLabel(k))} 비어 있음" ${ro?'tabindex="-1"':''}></button>`;
+      }
+    });
+  }
+  return `<div class="wkwrap"><div class="wk">${h}</div></div>`;
+}
+function dayListHTML(plan){
+  return `<div class="daylist">${DAYS.map(D=>{
+    const rows = D.hours.map(hr=>{const k=D.key+'-'+String(hr).padStart(2,'0'),v=plan[k];if(!v)return '';return `<tr style="--c:${SUBC[v.s]||'#8C8476'}"><td>${hr}:00~${hr+1}:00</td><td>${esc(v.s||'-')}</td><td>${esc((v.m||[]).join(', '))}</td><td>${(v.m||[]).length?`<span class="mm">${esc(v.m.join(', '))}</span>`:''}${esc(v.t||'')}</td></tr>`}).join('');
+    const n = D.hours.filter(hr=>plan[D.key+'-'+String(hr).padStart(2,'0')]).length;
+    return `<section><h3>${D.m}월 ${D.d}일(${DOW[D.dow]}) · D-${D.dday} <span class="note">${n}/${D.hours.length}시간</span></h3>${rows?`<table>${rows}</table>`:'<p class="note" style="padding:8px 12px">계획 없음</p>'}</section>`}).join('')}</div>`;
+}
+
+/* ================= 학생: 로그인 ================= */
+function loginHTML(){
+  const L=S.login;
+  return `<section class="card">
+    <div class="no">STEP 1 · 내 계획표 열기</div>
+    <h1>기말고사까지, 나만의 공부 지도</h1>
+    <p>11월 16일(월)부터 12월 6일(일)까지 3주 동안 <b>한 시간 단위</b>로 무엇을, 어떻게 공부할지 계획해 보자. 평일은 17시부터 24시까지, 주말은 9시부터 24시까지 채울 수 있다.</p>
+    ${LIVE?'':'<div class="demo"><b>미리보기(체험) 모드</b> · 지금은 입력 내용이 이 기기에만 저장됩니다. index.html의 SYNC_URL에 Apps Script 주소를 넣으면 학생 제출물이 선생님의 구글 시트에 모입니다. 교사용 화면 체험 암호: 0000</div>'}
+    <form id="loginf" class="g3" autocomplete="off">
+      <label for="lnum">번호
+        <select id="lnum" required><option value="">번호 선택</option>${Array.from({length:CLASS_SIZE},(_,i)=>`<option value="${i+1}" ${String(L.num)===String(i+1)?'selected':''}>${i+1}번</option>`).join('')}</select></label>
+      <label for="lname">이름<input type="text" id="lname" maxlength="10" required value="${esc(L.name)}"></label>
+      <label for="lpin">비밀번호 <span>숫자 4자리</span><input type="password" id="lpin" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" required autocomplete="off"></label>
+      <div class="btns" style="grid-column:1/-1"><button class="btn" type="submit" ${S.busy?'disabled':''}>${S.busy?'여는 중…':'내 계획표 열기'}</button></div>
+    </form>
+    ${L.err?`<div class="msg bad" role="alert">${esc(L.err)}</div>`:''}
+    <p class="note">처음 여는 사람은 지금 입력한 4자리 숫자가 <b>내 계획표의 비밀번호</b>가 된다. 다음에 고치러 올 때 같은 번호와 비밀번호를 넣자. 내 계획표는 나와 담임 선생님만 볼 수 있다.</p>
+  </section>`;
+}
+async function doLogin(e){
+  e.preventDefault();
+  const num=+$('#lnum').value, name=$('#lname').value.trim(), pin=$('#lpin').value.trim();
+  S.login.num=num; S.login.name=name;
+  if(!num||!name){S.login.err='번호와 이름을 입력하세요.';return render()}
+  if(!/^\d{4}$/.test(pin)){S.login.err='비밀번호는 숫자 4자리로 입력하세요.';return render()}
+  S.busy=true; S.login.err=''; render();
+  try{
+    const r = await call('studentLoad',num,pin);
+    if(!r||!r.ok){S.login.err=errText(r&&r.error);S.busy=false;return render()}
+    ls.set('plan-last',{num,name});
+    S.me={num,name,pin};
+    S.plan = r.exists ? (r.plan||{}) : {};
+    S.info = {submitted:!!r.submitted,submittedAt:r.submittedAt||'',savedAt:r.savedAt||''};
+    S.dirty=false; S.msg=null;
+    if(r.exists && r.name && r.name!==name) S.msg={k:'warn',t:`${num}번 계획표는 '${r.name}' 이름으로 저장되어 있어요. 저장하면 '${name}'(으)로 바뀝니다.`};
+    const draft = ls.get('plan-draft-'+num,null);
+    if(draft && draft.dirty && draft.plan){S.plan=draft.plan;S.dirty=true;S.msg={k:'warn',t:'이 기기에 아직 저장하지 않은 작성 내용이 있어 불러왔어요. 아래 [저장하기]를 눌러 보관하세요.'}}
+    else if(!r.exists) S.msg={k:'ok',t:'새 계획표를 만들었어요. 달력에서 날짜를 고르거나 아래 시간표의 빈칸(+)을 눌러 계획을 적어 보자.'};
+  }catch(err){S.login.err=errText()}
+  S.busy=false; render();
+}
+
+/* ================= 학생: 계획표 ================= */
+function plannerHTML(){
+  const hours=countBy(S.plan), n=filledCount(S.plan), I=S.info;
+  const st = I.submitted?'<span class="badge done">제출 완료</span>':I.savedAt?'<span class="badge wip">작성 중 (미제출)</span>':'<span class="badge none">아직 저장 안 함</span>';
+  const study = Object.entries(hours).filter(([k])=>k!=='휴식').reduce((a,[,v])=>a+v,0);
+  return `
+  ${LIVE?'':'<div class="demo"><b>미리보기(체험) 모드</b> · 입력 내용은 이 기기에만 저장됩니다.</div>'}
+  <section class="card">
+    <div class="who"><h2>${esc(S.me.num)}번 ${esc(S.me.name)}의 공부 계획표</h2>${st}<button class="btn alt sm" data-act="logout">나가기</button></div>
+    <p class="note">채운 시간 <b>${n}</b> / ${TOTAL}시간 · 공부 ${study}시간${hours['휴식']?` · 휴식 ${hours['휴식']}시간`:''}</p>
+    ${meterHTML(hours)}${legendHTML(hours)}
+    ${S.msg?`<div class="msg ${S.msg.k}" role="status">${esc(S.msg.t)}</div>`:''}
+  </section>
+  <section class="card">
+    <div class="no">한눈에 보기 · 날짜를 누르면 그 주 시간표로 이동</div>
+    ${calHTML(S.plan,S.week,S.focusDay)}
+  </section>
+  <section class="card" id="weekcard">
+    <div class="no">주간 시간표 · 칸을 눌러 과목과 공부 방법을 적자</div>
+    ${weekTabsHTML(S.plan,S.week,'data-week')}
+    ${weekHTML(S.plan,S.week,false,S.focusDay)}
+    <p class="note">빗금 칸은 학교 수업 시간이다. 저녁 식사나 쉬는 시간은 과목에서 <b>휴식</b>을 골라 표시해도 좋다. 휴대폰에서는 시간표를 옆으로 밀면 주말까지 보인다.</p>
+  </section>`;
+}
+function dockHTML(){
+  const I=S.info;
+  let st = S.dirty?'<b>저장하지 않은 변경이 있어요.</b>':I.savedAt?`마지막 저장 ${esc(I.savedAt)}`:'아직 저장하지 않았어요.';
+  if(I.submitted) st += ` · 제출 ${esc(I.submittedAt)}`;
+  if(S.confirmSubmit){
+    const n=filledCount(S.plan);
+    return `<div class="st"><b>제출할까요?</b> 채운 시간 ${n}/${TOTAL}시간. 제출한 뒤에도 고쳐서 다시 제출할 수 있어요.</div><div class="btns"><button class="btn alt" data-act="nosubmit">취소</button><button class="btn" data-act="submit" ${S.busy?'disabled':''}>${S.busy?'제출하는 중…':'제출하기'}</button></div>`;
+  }
+  return `<div class="st" role="status">${st}</div><div class="btns"><button class="btn steel" data-act="save" ${S.busy?'disabled':''}>${S.busy?'저장하는 중…':'저장하기'}</button><button class="btn" data-act="asksubmit" ${S.busy?'disabled':''}>${I.submitted?'다시 제출':'선생님께 제출'}</button></div>`;
+}
+function markDirty(){S.dirty=true;ls.set('plan-draft-'+S.me.num,{dirty:true,plan:S.plan})}
+async function save(submit){
+  if(S.busy)return;
+  S.busy=true; render();
+  try{
+    const r = await call('studentSave',S.me.num,S.me.name,S.me.pin,JSON.stringify(S.plan),!!submit);
+    if(!r||!r.ok){S.msg={k:'bad',t:errText(r&&r.error)}}
+    else{
+      S.info={submitted:r.submitted,submittedAt:r.submittedAt||'',savedAt:r.savedAt||''};
+      S.dirty=false; ls.del('plan-draft-'+S.me.num);
+      S.msg={k:'ok',t:submit?`제출했어요! (${r.submittedAt}) 선생님이 계획표를 확인할 수 있어요. 계획이 바뀌면 고친 뒤 다시 제출하자.`:`저장했어요. (${r.savedAt}) 다 채우면 [선생님께 제출]을 누르자.`};
+    }
+  }catch(e){S.msg={k:'bad',t:'저장하지 못했어요. 쓴 내용은 이 기기에 남아 있어요. 인터넷 연결을 확인하고 다시 눌러 보자.'}}
+  S.busy=false; S.confirmSubmit=false; render();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ================= 입력 시트 ================= */
+const E = {key:null,s:'',m:[],t:'',other:'',ro:false,plan:null};
+function openSheet(key,ro,plan){
+  const v=(plan||S.plan)[key]||{};
+  E.key=key; E.ro=!!ro; E.plan=plan||S.plan;
+  if(ro && !v.s && !v.t) return;
+  E.s=v.s||''; E.m=(v.m||[]).filter(x=>METHODS.includes(x)); E.other=(v.m||[]).filter(x=>!METHODS.includes(x)).join(', '); E.t=v.t||'';
+  drawSheet(); $('#sheetbg').hidden=false;
+  setTimeout(()=>{const f=$('#sheet [data-subj][aria-pressed=true]')||$('#sheet button');f&&f.focus()},30);
+}
+function closeSheet(){ $('#sheetbg').hidden=true; const b=document.querySelector(`[data-slot="${E.key}"]`); b&&b.focus(); }
+function drawSheet(){
+  const k=E.key;
+  if(E.ro){
+    const v=E.plan[k]||{};
+    $('#sheet').innerHTML=`<div class="sh-top"><div><div class="no">계획 보기</div><h3 id="shtitle">${esc(slotLabel(k))}</h3></div><button class="x" data-act="close" aria-label="닫기">×</button></div>
+    <div class="rotxt"><div><b>과목</b><span style="color:${SUBC[v.s]||'inherit'};font-weight:700">${esc(v.s||'-')}</span></div><div><b>공부 방식</b><span>${esc((v.m||[]).join(', ')||'-')}</span></div><div><b>구체적 내용</b><span>${esc(v.t||'-')}</span></div></div>`;
+    return;
+  }
+  const i=SLOTS.indexOf(k);
+  $('#sheet').innerHTML=`
+  <div class="sh-top"><div><div class="no">한 시간 계획 · ${i+1}/${TOTAL}</div><h3 id="shtitle">${esc(slotLabel(k))}</h3></div><button class="x" data-act="close" aria-label="닫기">×</button></div>
+  <fieldset class="fs"><legend>과목</legend><div class="chips">${SUBJECTS.map(s=>`<button type="button" class="chip" data-subj="${s.n}" style="--c:${s.c}" aria-pressed="${E.s===s.n}"><span class="dot"></span>${s.n}</button>`).join('')}</div></fieldset>
+  <fieldset class="fs"><legend>공부 방식 <span>여러 개 골라도 된다</span></legend><div class="chips">${METHODS.map(m=>`<button type="button" class="chip" data-meth="${m}" aria-pressed="${E.m.includes(m)}">${m}</button>`).join('')}</div>
+    <label for="eother" style="font-weight:400">다른 방식 직접 쓰기<input type="text" id="eother" maxlength="30" placeholder="예) 친구와 서로 문제 내기" value="${esc(E.other)}"></label></fieldset>
+  <label for="etext">구체적으로 무엇을 공부할까? <span>범위, 교재, 목표를 적자</span>
+    <textarea id="etext" maxlength="100" placeholder="예) 교과서 3단원 p.80~95 핵심 개념 정리 → 익힘책 문제 20개 풀기">${esc(E.t)}</textarea></label>
+  <div class="btns">
+    <button class="btn alt sm" data-act="copyprev" type="button">앞 시간 내용 가져오기</button>
+    <button class="btn alt sm" data-act="clear" type="button">이 칸 비우기</button>
+  </div>
+  <div id="shmsg" aria-live="polite"></div>
+  <div class="btns" style="justify-content:flex-end">
+    <button class="btn steel" data-act="put" type="button">확인</button>
+    ${i<TOTAL-1?'<button class="btn" data-act="putnext" type="button">확인하고 다음 칸 →</button>':''}
+  </div>`;
+  $('#eother').oninput=e=>E.other=e.target.value;
+  $('#etext').oninput=e=>E.t=e.target.value;
+}
+function commitSheet(){
+  const m=[...E.m]; E.other.split(/[,，]/).map(x=>x.trim()).filter(Boolean).forEach(x=>{if(!m.includes(x))m.push(x.slice(0,30))});
+  const t=E.t.trim().slice(0,100);
+  const before=JSON.stringify(S.plan[E.key]||null);
+  if(!E.s && !m.length && !t) delete S.plan[E.key]; else S.plan[E.key]={s:E.s,m,t};
+  if(JSON.stringify(S.plan[E.key]||null)!==before) markDirty();
+}
+function sheetClick(b){
+  const a=b.dataset.act;
+  if(b.dataset.subj){E.s = E.s===b.dataset.subj?'':b.dataset.subj; drawSheet(); const f=$(`#sheet [data-subj="${b.dataset.subj}"]`); f&&f.focus(); return}
+  if(b.dataset.meth){const m=b.dataset.meth;E.m=E.m.includes(m)?E.m.filter(x=>x!==m):[...E.m,m]; drawSheet(); const f=$(`#sheet [data-meth="${m}"]`); f&&f.focus(); return}
+  if(a==='close'){closeSheet();return}
+  if(a==='clear'){E.s='';E.m=[];E.other='';E.t='';drawSheet();return}
+  if(a==='copyprev'){
+    const i=SLOTS.indexOf(E.key); let j=i-1; while(j>=0 && !S.plan[SLOTS[j]]) j--;
+    if(j<0){$('#shmsg').innerHTML='<div class="msg warn">앞에 채운 칸이 없어요.</div>';return}
+    const v=S.plan[SLOTS[j]]; E.s=v.s||''; E.m=(v.m||[]).filter(x=>METHODS.includes(x)); E.other=(v.m||[]).filter(x=>!METHODS.includes(x)).join(', '); E.t=v.t||''; drawSheet();
+    $('#shmsg').innerHTML=`<div class="msg ok">${esc(slotLabel(SLOTS[j]))} 내용을 가져왔어요.</div>`; return;
+  }
+  if(a==='put'||a==='putnext'){
+    if(!E.s && (E.m.length||E.t.trim()||E.other.trim())){$('#shmsg').innerHTML='<div class="msg warn">과목을 먼저 고르자.</div>';return}
+    commitSheet();
+    const nk = SLOTS[SLOTS.indexOf(E.key)+1];
+    if(a==='putnext' && nk){const D=dayOf(nk);S.week=D.week;S.focusDay=D.key;render();openSheet(nk)}
+    else{const D=dayOf(E.key);S.focusDay=D.key;render();closeSheet()}
+  }
+}
+
+/* ================= 교사 화면 ================= */
+function teacherHTML(){
+  const T=S.T;
+  if(T.detail) return teacherDetailHTML();
+  const head = `<section class="card"><div class="no">TEACHER · 담임 교사용</div><h2>우리 반 공부 계획표 확인</h2>
+    ${LIVE?'<p>학생들이 저장·제출한 계획표를 구글 시트에서 불러옵니다.</p>':'<div class="demo"><b>미리보기(체험) 모드</b> · 이 기기에서 입력한 계획표만 보입니다. 체험 암호: 0000</div>'}
+    <form id="tform" class="btns" autocomplete="off"><label for="tkey" style="flex:1 1 200px">교사 암호<input type="password" id="tkey" value="${esc(T.key)}" autocomplete="current-password"></label>
+    <button class="btn" type="submit" style="align-self:end" ${T.busy?'disabled':''}>${T.busy?'불러오는 중…':T.rows?'새로고침':'계획표 확인'}</button></form>
+    ${T.err?`<div class="msg bad" role="alert">${esc(T.err)}</div>`:''}</section>`;
+  if(!T.rows) return head;
+  const by={}; T.rows.forEach(r=>by[r.num]=r);
+  const done=T.rows.filter(r=>r.submitted).length, wip=T.rows.filter(r=>!r.submitted).length, none=CLASS_SIZE-done-wip;
+  const cls={}; T.rows.forEach(r=>Object.entries(r.hours||{}).forEach(([k,v])=>cls[k]=(cls[k]||0)+v));
+  const roster = Array.from({length:CLASS_SIZE},(_,i)=>{const r=by[i+1];
+    if(!r) return `<div class="stu none"><div class="r1"><span class="num">${i+1}</span><span class="nm note">미작성</span><span class="badge none">미제출</span></div></div>`;
+    const n=Object.values(r.hours||{}).reduce((a,b)=>a+b,0);
+    return `<button class="stu" data-stu="${r.num}"><div class="r1"><span class="num">${r.num}</span><span class="nm">${esc(r.name)}</span>${r.submitted?'<span class="badge done">제출</span>':'<span class="badge wip">작성 중</span>'}</div>${meterHTML(r.hours||{})}<div class="when">${n}/${TOTAL}시간 · ${r.submitted?'제출 '+esc(r.submittedAt):'저장 '+esc(r.savedAt)}</div></button>`}).join('');
+  return head + `<section class="card">
+    <div class="stats"><div class="stat done"><b>${done}</b>제출 완료</div><div class="stat wip"><b>${wip}</b>작성 중</div><div class="stat none"><b>${none}</b>미작성</div></div>
+    <h3>학급 전체 과목별 계획 시간</h3>${legendHTML(cls)}
+    <h3>1번 ~ ${CLASS_SIZE}번</h3><p class="note">학생을 누르면 그 학생의 계획표 전체가 열립니다.</p>
+    <div class="roster">${roster}</div></section>`;
+}
+function teacherDetailHTML(){
+  const T=S.T, d=T.detail, plan=d.plan||{}, hours=countBy(plan), n=filledCount(plan);
+  return `<button class="btn alt sm back" data-act="tback">← 전체 학생 목록</button>
+  <section class="card">
+    <div class="who"><h2>${esc(d.num)}번 ${esc(d.name)}</h2>${d.submitted?`<span class="badge done">제출 ${esc(d.submittedAt)}</span>`:`<span class="badge wip">작성 중 · 저장 ${esc(d.savedAt)}</span>`}</div>
+    <p class="note">채운 시간 ${n} / ${TOTAL}시간</p>${meterHTML(hours)}${legendHTML(hours)}
+    <div class="btns">${T.resetAsk?`<span class="note">이 학생의 비밀번호를 지울까요? 계획 내용은 그대로 남고, 학생이 다음에 입력하는 비밀번호가 새 비밀번호가 됩니다.</span><button class="btn alt sm" data-act="resetno">취소</button><button class="btn sm" data-act="resetyes">비밀번호 초기화</button>`:'<button class="btn alt sm" data-act="resetask">비밀번호 초기화</button>'}</div>
+    ${T.msg?`<div class="msg ok">${esc(T.msg)}</div>`:''}
+  </section>
+  <div class="subtabs" role="tablist"><button role="tab" data-tview="cal" aria-selected="${T.view==='cal'}">달력·시간표로 보기</button><button role="tab" data-tview="list" aria-selected="${T.view==='list'}">날짜별 목록으로 보기</button></div>
+  ${T.view==='cal'?`<section class="card">${calHTML(plan,T.week,T.focusDay)}</section>
+  <section class="card" id="weekcard">${weekTabsHTML(plan,T.week,'data-tweek')}${weekHTML(plan,T.week,true,T.focusDay)}<p class="note">칸을 누르면 구체적 내용이 보입니다.</p></section>`
+  :`<section class="card">${dayListHTML(plan)}</section>`}`;
+}
+async function loadTeacher(){
+  const T=S.T; const k=$('#tkey'); if(k) T.key=k.value.trim();
+  if(!T.key){T.err='교사 암호를 입력하세요.';return render()}
+  T.busy=true; T.err=''; render();
+  try{const r=await call('teacherList',T.key); if(r&&r.ok){T.rows=r.rows}else{T.rows=null;T.err=errText(r&&r.error)}}
+  catch(e){T.err=errText()}
+  T.busy=false; render();
+}
+async function openStudent(num){
+  const T=S.T; T.busy=true;
+  try{const r=await call('teacherGet',T.key,num); if(r&&r.ok){T.detail=r;T.view='cal';T.focusDay=null;T.resetAsk=false;T.msg=''}else{T.err=errText(r&&r.error)}}
+  catch(e){T.err=errText()}
+  T.busy=false; render(); window.scrollTo(0,0);
+}
+
+/* ================= 렌더 & 이벤트 ================= */
+function render(){
+  const today=new Date(), ex=new Date(EXAM.y,EXAM.m-1,EXAM.d), dd=Math.ceil((ex-new Date(today.getFullYear(),today.getMonth(),today.getDate()))/864e5);
+  $('#dday').textContent = dd>0?`D-${dd}`:dd===0?'D-day':'시험 끝';
+  $('#nav').innerHTML = [['student','학생'],['teacher','선생님']].map(([r,l])=>`<button data-route="${r}" ${S.route===r?'aria-current="page"':''}>${l}</button>`).join('');
+  let h='';
+  if(S.route==='student') h = S.me?plannerHTML():loginHTML();
+  else h = teacherHTML();
+  $('#app').innerHTML = h;
+  const showDock = S.route==='student' && !!S.me;
+  $('#dock').hidden = !showDock;
+  if(showDock) $('#dockin').innerHTML = dockHTML();
+  const lf=$('#loginf'); if(lf) lf.onsubmit=doLogin;
+  const tf=$('#tform'); if(tf) tf.onsubmit=e=>{e.preventDefault();loadTeacher()};
+}
+document.addEventListener('click',e=>{
+  const sb=e.target.closest('#sheet button'); if(sb){sheetClick(sb);return}
+  if(e.target.id==='sheetbg'){closeSheet();return}
+  const b=e.target.closest('button'); if(!b)return;
+  const d=b.dataset;
+  if(d.route){S.route=d.route;render();window.scrollTo(0,0);return}
+  if(d.slot){ if(S.route==='teacher') openSheet(d.slot,true,S.T.detail.plan); else openSheet(d.slot,false); return}
+  if(d.day){
+    const D=DAYS.find(x=>x.key===d.day);
+    if(S.route==='teacher'){S.T.week=D.week;S.T.focusDay=D.key}else{S.week=D.week;S.focusDay=D.key}
+    render(); const w=$('#weekcard'); w&&w.scrollIntoView({behavior:'smooth',block:'start'}); return;
+  }
+  if(d.week!=null){S.week=+d.week;S.focusDay=null;render();return}
+  if(d.tweek!=null){S.T.week=+d.tweek;S.T.focusDay=null;render();return}
+  if(d.tview){S.T.view=d.tview;render();return}
+  if(d.stu){openStudent(+d.stu);return}
+  switch(d.act){
+    case 'save': save(false); break;
+    case 'asksubmit': if(!filledCount(S.plan)){S.msg={k:'warn',t:'아직 채운 칸이 없어요. 계획을 적은 뒤 제출하자.'};render();window.scrollTo({top:0,behavior:'smooth'})}else{S.confirmSubmit=true;render()} break;
+    case 'nosubmit': S.confirmSubmit=false; render(); break;
+    case 'submit': save(true); break;
+    case 'logout':
+      if(S.dirty && !S.logoutAsk){S.logoutAsk=true;S.msg={k:'warn',t:'저장하지 않은 변경이 있어요. 그래도 나가려면 [나가기]를 한 번 더 누르세요. (작성 내용은 이 기기에 남아 있어요.)'};render();return}
+      S.logoutAsk=false;S.me=null;S.plan={};S.msg=null;S.dirty=false;S.login.err='';render(); break;
+    case 'tback': S.T.detail=null; render(); break;
+    case 'resetask': S.T.resetAsk=true; render(); break;
+    case 'resetno': S.T.resetAsk=false; render(); break;
+    case 'resetyes': (async()=>{const r=await call('teacherResetPin',S.T.key,S.T.detail.num).catch(()=>null);S.T.resetAsk=false;S.T.msg=r&&r.ok?'비밀번호를 초기화했습니다. 학생이 다음에 입력하는 4자리 숫자가 새 비밀번호가 됩니다.':errText(r&&r.error);render()})(); break;
+  }
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#sheetbg').hidden)closeSheet()});
+window.addEventListener('beforeunload',e=>{if(S.dirty){e.preventDefault();e.returnValue=''}});
+render();
+</script>
+</body>
+</html>
